@@ -25,7 +25,9 @@ namespace Events {
 
         const auto caster = player->GetActorRuntimeData().magicCasters[0];
 
-        if (caster && caster->GetIsDualCasting()) radius *= 2;
+        for (const auto& caster : player->GetActorRuntimeData().magicCasters) {
+            if (caster && caster->GetCasterAsActor() && caster->GetIsDualCasting()) radius *= 2;  
+        }
 
         // https://www.creationkit.com/index.php?title=Unit
         game->ForEachReferenceInRange(player, radius, [&](RE::TESObjectREFR& ref) {
