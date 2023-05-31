@@ -23,8 +23,6 @@ namespace Events {
 
         auto radius = 256.0f;
 
-        const auto caster = player->GetActorRuntimeData().magicCasters[0];
-
         for (const auto& caster : player->GetActorRuntimeData().magicCasters) {
             if (caster && caster->GetCasterAsActor() && caster->GetIsDualCasting()) radius *= 2;  
         }
