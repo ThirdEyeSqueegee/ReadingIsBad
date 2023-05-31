@@ -4,29 +4,36 @@
 namespace Events {
     OnSpellCastEventHandler* OnSpellCastEventHandler::GetSingleton() {
         static OnSpellCastEventHandler singleton;
-        return &singleton;
+        return std::addressof(singleton);
     }
 
     RE::BSEventNotifyControl OnSpellCastEventHandler::ProcessEvent(const RE::TESSpellCastEvent* event,
                                                                    RE::BSTEventSource<RE::TESSpellCastEvent>* source) {
         if (!event) return RE::BSEventNotifyControl::kContinue;
 
-        const auto casted_spell = RE::TESForm::LookupByID(event->spell);
         const auto spell_form = Utility::GetSingleton()->ReadSpell;
 
-        if (const auto spell = casted_spell->As<RE::SpellItem>(); spell != spell_form)
+        if (event->spell != spell_form->GetFormID()) {
+            logger::info("Detected other spell");
             return RE::BSEventNotifyControl::kContinue;
+        }
 
         const auto game = RE::TES::GetSingleton();
         const auto player = RE::PlayerCharacter::GetSingleton();
 
-        game->ForEachReferenceInRange(player, 256.0f, [&](RE::TESObjectREFR& ref) {
+        auto radius = 256.0f;
+
+        const auto caster = player->GetActorRuntimeData().magicCasters[0];
+
+        if (caster && caster->GetIsDualCasting()) radius *= 2;
+
+        // https://www.creationkit.com/index.php?title=Unit
+        game->ForEachReferenceInRange(player, radius, [&](RE::TESObjectREFR& ref) {
             const auto object = ref.GetBaseObject();
             if (object->GetFormType() == RE::FormType::Book) {
                 const auto book = object->As<RE::TESObjectBOOK>();
                 if (!book->IsRead()) book->Read(player);
             }
-
             return RE::BSContainer::ForEachResult::kContinue;
         });
 
@@ -34,8 +41,8 @@ namespace Events {
     }
 
     void OnSpellCastEventHandler::Register() {
-        RE::ScriptEventSourceHolder* holder = RE::ScriptEventSourceHolder::GetSingleton();
+        const auto holder = RE::ScriptEventSourceHolder::GetSingleton();
         holder->AddEventSink(GetSingleton());
-        SKSE::log::info("Registered event handler");
+        logger::info("Registered event handler");
     }
 }

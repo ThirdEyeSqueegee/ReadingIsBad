@@ -1,6 +1,6 @@
 #include "Config.h"
 
-const Config& Config::GetSingleton() noexcept {
+Config* Config::GetSingleton() noexcept {
     static Config instance;
 
     static std::atomic_bool initialized;
@@ -14,7 +14,7 @@ const Config& Config::GetSingleton() noexcept {
     }
     latch.wait();
 
-    return instance;
+    return std::addressof(instance);
 }
 
 void Debug::Deserialize(std::istream& in) {

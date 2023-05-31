@@ -51,7 +51,7 @@
       "name": "msvc",
       "hidden": true,
       "environment": {
-        "COMMONLIBSSE_COMPILER": "/permissive- /Zc:preprocessor /EHsc $penv{CXXFLAGS}"
+        "COMMONLIBSSE_COMPILER": "/permissive- /Zc:preprocessor /EHsc $penv{CXXFLAGS} /O2"
       },
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {

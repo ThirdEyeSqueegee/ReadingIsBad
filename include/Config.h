@@ -2,11 +2,11 @@
 
 class Debug {
 public:
-    [[nodiscard]] inline spdlog::level::level_enum GetLogLevel() const noexcept {
+    [[nodiscard]] spdlog::level::level_enum GetLogLevel() const noexcept {
         return _logLevel;
     }
 
-    [[nodiscard]] inline spdlog::level::level_enum GetFlushLevel() const noexcept {
+    [[nodiscard]] spdlog::level::level_enum GetFlushLevel() const noexcept {
         return _flushLevel;
     }
 
@@ -19,11 +19,11 @@ private:
 
 class Config {
 public:
-    [[nodiscard]] inline const Debug& GetDebug() const noexcept {
+    [[nodiscard]] const Debug& GetDebug() const noexcept {
         return _debug;
     }
 
-    [[nodiscard]] static const Config& GetSingleton() noexcept;
+    [[nodiscard]] static Config* GetSingleton() noexcept;
 
     void Deserialize(std::istream& in);
 
