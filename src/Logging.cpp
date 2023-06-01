@@ -1,5 +1,4 @@
 #include "Logging.h"
-#include "Config.h"
 
 void InitializeLogging() {
     auto path = SKSE::log::log_directory();
@@ -17,9 +16,8 @@ void InitializeLogging() {
         log = std::make_shared<spdlog::logger>(
             "Global", std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true));
     }
-    const auto debugConfig = Config::GetSingleton()->GetDebug();
-    log->set_level(debugConfig.GetLogLevel());
-    log->flush_on(debugConfig.GetFlushLevel());
+    log->set_level(spdlog::level::level_enum::info);
+    log->flush_on(spdlog::level::level_enum::trace);
 
     set_default_logger(std::move(log));
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%l] [%t] [%s:%#] %v");

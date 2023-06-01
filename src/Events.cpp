@@ -1,5 +1,6 @@
 #include "Events.h"
 #include "Utility.h"
+#include "Settings.h"
 
 namespace Events {
     OnSpellCastEventHandler* OnSpellCastEventHandler::GetSingleton() {
@@ -21,7 +22,7 @@ namespace Events {
         const auto game = RE::TES::GetSingleton();
         const auto player = RE::PlayerCharacter::GetSingleton();
 
-        auto radius = 256.0f;
+        auto radius = Settings::GetSingleton()->radius;
 
         for (const auto& caster : player->GetActorRuntimeData().magicCasters) {
             if (caster && caster->GetCasterAsActor() && caster->GetIsDualCasting()) radius *= 2;  

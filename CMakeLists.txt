@@ -22,13 +22,14 @@ configure_file(
 set(PUBLIC_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}")
 set(headers
         include/FormLookup.h
-        include/Utility.h)
+        include/Utility.h
+        include/Settings.h)
 
 set(sources
-        src/Config.cpp
         src/Logging.cpp
         src/Main.cpp
         src/Events.cpp
+        src/Settings.cpp
 
         ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
 
@@ -108,11 +109,8 @@ endif()
 ## Automatic plugin deployment
 ########################################################################################################################
 # Automatic deployment to FOMOD directory.
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(BUILD_NAME "Debug")
-else()
-    set(BUILD_NAME "Release")
-endif()
+set(BUILD_NAME "Release")
+
 install(DIRECTORY DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/contrib/Distribution/Papyrus${BUILD_NAME}/")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_SOURCE_DIR}/contrib/Distribution/Plugin${BUILD_NAME}/")

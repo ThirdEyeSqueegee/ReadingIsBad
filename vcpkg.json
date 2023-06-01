@@ -22,7 +22,7 @@
     },
     "plugin": {
       "description": "Build the SKSE plugin.",
-      "dependencies": ["commonlibsse-ng"]
+      "dependencies": ["commonlibsse-ng", "simpleini"]
     },
     "tests": {
       "description": "Build tests for the SKSE plugin.",

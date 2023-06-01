@@ -5,8 +5,6 @@ protected:
     Utility() = default;
 
 public:
-    RE::SpellItem* ReadSpell;
-
     Utility(const Utility&) = delete;
     Utility(Utility&&) = delete;
     Utility& operator=(const Utility&) = delete;
@@ -16,4 +14,6 @@ public:
         static Utility singleton;
         return std::addressof(singleton);
     }
+
+    RE::SpellItem* ReadSpell;
 };
