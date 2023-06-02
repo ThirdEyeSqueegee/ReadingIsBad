@@ -34,6 +34,15 @@ namespace Events {
             if (object->GetFormType() == RE::FormType::Book) {
                 const auto book = object->As<RE::TESObjectBOOK>();
                 if (!book->IsRead()) book->Read(player);
+            } else if (object->GetFormType() == RE::FormType::Container) {
+                const auto container = object->As<RE::TESContainer>();
+                container->ForEachContainerObject([&](const RE::ContainerObject& cref) {
+                    if (cref.obj->GetFormType() == RE::FormType::Book) {
+                        const auto cbook = cref.obj->As<RE::TESObjectBOOK>();
+                        if (!cbook->IsRead()) cbook->Read(player);
+                    }
+                    return RE::BSContainer::ForEachResult::kContinue;
+                });
             }
             return RE::BSContainer::ForEachResult::kContinue;
         });
