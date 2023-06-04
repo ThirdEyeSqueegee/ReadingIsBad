@@ -9,7 +9,7 @@ void Listener(SKSE::MessagingInterface::Message* message) {
         const auto handler = Events::OnSpellCastEventHandler::GetSingleton();
         handler->Register();
         FormLookup::LoadSpell();
-        Settings::GetSingleton()->LoadSettings();
+        Settings::LoadSettings();
     }
 }
 
