@@ -30,37 +30,25 @@ namespace Events {
             const auto object = ref.GetBaseObject();
             if (object->GetFormType() == RE::FormType::Book) {
                 if (const auto book = object->As<RE::TESObjectBOOK>(); !book->IsRead()) {
+                    book->Read(player);
                     auto notif = std::format("Book read: {}", book->GetName());
                     if (book->TeachesSkill())
-                        notif = std::format("Book read: {} (Skill)", book->GetName());
-                    else if (book->TeachesSpell()) {
-                        notif = std::format("Book read: {} (Spell)", book->GetName());
-                        const auto actor = player->As<RE::Actor>();
-                        if (book->CanBeTaken()) {
-                            actor->PickUpObject(&ref, 1);
-                            player->RemoveItem(book, 1, RE::ITEM_REMOVE_REASON::kRemove, nullptr, nullptr);
-                        }
-                    }
+                        notif = std::format("Skill Book read: {}", book->GetName());
+                    else if (book->TeachesSpell()) 
+                        notif = std::format("Spell Tome read: {}", book->GetName());
                     RE::DebugNotification(notif.c_str());
-                    book->Read(player);
                 }
             } else if (object->GetFormType() == RE::FormType::Container) {
-                const auto books = ref.GetInventory([](const RE::TESBoundObject& item) { return item.IsBook(); });
-                for (const auto obj : books | std::views::keys) {
+                for (const auto books = ref.GetInventory([](const RE::TESBoundObject& item) { return item.IsBook(); });
+                     const auto obj : books | std::views::keys) {
                     const auto book = obj->As<RE::TESObjectBOOK>();
+                    if (!book->IsRead()) book->Read(player);
                     auto notif = std::format("Book read: {}", book->GetName());
                     if (book->TeachesSkill())
-                        notif = std::format("Book read: {} (Skill)", book->GetName());
-                    else if (book->TeachesSpell()) {
-                        notif = std::format("Book read: {} (Spell)", book->GetName());
-                        const auto actor = player->As<RE::Actor>();
-                        if (book->CanBeTaken()) {
-                            actor->PickUpObject(book->AsReference(), 1);
-                            player->RemoveItem(book, 1, RE::ITEM_REMOVE_REASON::kRemove, nullptr, nullptr);
-                        }
-                    }
+                        notif = std::format("Skill Book read: {}", book->GetName());
+                    else if (book->TeachesSpell()) 
+                        notif = std::format("Spell Tome read: {}", book->GetName());
                     RE::DebugNotification(notif.c_str());
-                    book->Read(player);
                 }
             }
             return RE::BSContainer::ForEachResult::kContinue;

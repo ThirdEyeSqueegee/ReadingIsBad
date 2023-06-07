@@ -6,8 +6,7 @@
 
 void Listener(SKSE::MessagingInterface::Message* message) {
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
-        const auto handler = Events::OnSpellCastEventHandler::GetSingleton();
-        handler->Register();
+        Events::OnSpellCastEventHandler::Register();
         FormLookup::LoadSpell();
         Settings::LoadSettings();
     }
@@ -24,5 +23,6 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse) {
     if (!messaging->RegisterListener(Listener)) return false;
 
     logger::info("{} has finished loading.", plugin->GetName());
+
     return true;
 }

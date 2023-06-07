@@ -8,7 +8,9 @@ Settings* Settings::GetSingleton() {
 
 void Settings::LoadSettings() {
     logger::info("Loading settings");
+
     CSimpleIniA ini;
+
     ini.SetUnicode();
     ini.LoadFile(R"(.\Data\SKSE\Plugins\ReadingIsBad.ini)");
 
