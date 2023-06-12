@@ -34,21 +34,25 @@ namespace Events {
                     auto notif = std::format("Book read: {}", book->GetName());
                     if (book->TeachesSkill())
                         notif = std::format("Skill Book read: {}", book->GetName());
-                    else if (book->TeachesSpell()) 
+                    else if (book->TeachesSpell())
                         notif = std::format("Spell Tome read: {}", book->GetName());
                     RE::DebugNotification(notif.c_str());
                 }
             } else if (object->GetFormType() == RE::FormType::Container) {
-                for (const auto books = ref.GetInventory([](const RE::TESBoundObject& item) { return item.IsBook(); });
-                     const auto obj : books | std::views::keys) {
-                    const auto book = obj->As<RE::TESObjectBOOK>();
-                    if (!book->IsRead()) book->Read(player);
-                    auto notif = std::format("Book read: {}", book->GetName());
-                    if (book->TeachesSkill())
-                        notif = std::format("Skill Book read: {}", book->GetName());
-                    else if (book->TeachesSpell()) 
-                        notif = std::format("Spell Tome read: {}", book->GetName());
-                    RE::DebugNotification(notif.c_str());
+                if (!std::string_view(object->GetName()).contains("Merchant")) {
+                    for (const auto books = ref.GetInventory([](const RE::TESBoundObject& item) {
+                             return item.IsBook();
+                         });
+                         const auto obj : books | std::views::keys) {
+                        const auto book = obj->As<RE::TESObjectBOOK>();
+                        if (!book->IsRead()) book->Read(player);
+                        auto notif = std::format("Book read: {}", book->GetName());
+                        if (book->TeachesSkill())
+                            notif = std::format("Skill Book read: {}", book->GetName());
+                        else if (book->TeachesSpell())
+                            notif = std::format("Spell Tome read: {}", book->GetName());
+                        RE::DebugNotification(notif.c_str());
+                    }
                 }
             }
             return RE::BSContainer::ForEachResult::kContinue;
