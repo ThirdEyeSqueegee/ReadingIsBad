@@ -14,7 +14,7 @@ void Settings::LoadSettings() {
     ini.SetUnicode();
     ini.LoadFile(R"(.\Data\SKSE\Plugins\ReadingIsBad.ini)");
 
-    GetSingleton()->radius = std::atof(ini.GetValue("General", "fSpellRange"));
+    radius = std::atof(ini.GetValue("General", "fSpellRange"));
 
     logger::info("Loaded settings");
 }

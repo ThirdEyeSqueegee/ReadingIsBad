@@ -14,5 +14,5 @@ public:
     static Settings* GetSingleton();
     static void LoadSettings();
 
-    float radius;
+    inline static float radius;
 };
