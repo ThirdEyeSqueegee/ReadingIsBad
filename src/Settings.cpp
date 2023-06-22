@@ -1,5 +1,6 @@
 #include "Settings.h"
 #include "SimpleIni.h"
+#include "Logging.h"
 
 Settings* Settings::GetSingleton() {
     static Settings singleton;
@@ -14,7 +15,7 @@ void Settings::LoadSettings() {
     ini.SetUnicode();
     ini.LoadFile(R"(.\Data\SKSE\Plugins\ReadingIsBad.ini)");
 
-    radius = std::atof(ini.GetValue("General", "fSpellRange"));
+    radius = static_cast<float>(std::atof(ini.GetValue("General", "fSpellRange")));
 
     logger::info("Loaded settings");
 }

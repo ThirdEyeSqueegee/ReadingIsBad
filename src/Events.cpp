@@ -17,46 +17,36 @@ namespace Events {
 
         const auto game = RE::TES::GetSingleton();
         const auto player = RE::PlayerCharacter::GetSingleton();
-
-        auto radius = Settings::radius;
-
-        for (const auto& caster : player->GetActorRuntimeData().magicCasters) {
-            if (caster && caster->GetCasterAsActor() && caster->GetIsDualCasting()) {
-                logger::info("Dual casting, doubling effective radius");
-                radius *= 2;
-            }
-        }
+        const auto radius = Settings::radius;
 
         game->ForEachReferenceInRange(player, radius, [&](RE::TESObjectREFR& ref) {
-            if (const auto object = ref.GetBaseObject(); object->GetFormType() == RE::FormType::Book) {
+            if (const auto object = ref.GetBaseObject(); object->IsBook()) {
                 if (const auto book = object->As<RE::TESObjectBOOK>(); !book->IsRead()) {
                     auto notif = std::format("Book read: {}", book->GetName());
-                    if (book->TeachesSkill()) {
+
+                    if (book->TeachesSkill())
                         notif = std::format("Skill Book read: {}", book->GetName());
-                        book->Read(player);
-                    } else if (book->TeachesSpell() && !player->HasSpell(book->GetSpell())) {
+                    else if (book->TeachesSpell() && !player->HasSpell(book->GetSpell()))
                         notif = std::format("Spell Tome read: {}", book->GetName());
-                        book->Read(player);
-                    }
+
+                    book->Read(player);
                     RE::DebugNotification(notif.c_str());
                 }
             } else if (object->GetFormType() == RE::FormType::Container) {
-                if (!std::string_view(object->GetName()).contains("Merchant")) {
-                    logger::info("Scanning container {}", ref.GetName());
+                if (!std::string_view(object->GetName()).contains("Chest"sv)) {
                     for (const auto books = ref.GetInventory([](const RE::TESBoundObject& item) {
                              return item.IsBook();
                          });
                          const auto obj : books | std::views::keys) {
-                        const auto book = obj->As<RE::TESObjectBOOK>();
-                        if (!book->IsRead()) {
+                        if (const auto book = obj->As<RE::TESObjectBOOK>(); !book->IsRead()) {
                             auto notif = std::format("Book read: {}", book->GetName());
-                            if (book->TeachesSkill() && !book->IsRead()) {
+
+                            if (book->TeachesSkill())
                                 notif = std::format("Skill Book read: {}", book->GetName());
-                                book->Read(player);
-                            } else if (book->TeachesSpell() && !player->HasSpell(book->GetSpell()) && !book->IsRead()) {
+                            else if (book->TeachesSpell() && !player->HasSpell(book->GetSpell()))
                                 notif = std::format("Spell Tome read: {}", book->GetName());
-                                book->Read(player);
-                            }
+
+                            book->Read(player);
                             RE::DebugNotification(notif.c_str());
                         }
                     }
