@@ -1,4 +1,5 @@
 #include "Events.h"
+
 #include "Utility.h"
 #include "Settings.h"
 
@@ -17,7 +18,12 @@ namespace Events {
 
         const auto game = RE::TES::GetSingleton();
         const auto player = RE::PlayerCharacter::GetSingleton();
-        const auto radius = Settings::radius;
+        auto radius = Settings::radius;
+
+        auto is_dual_casting = false;
+        player->GetGraphVariableBool("IsCastingDual"sv, is_dual_casting);
+        if (is_dual_casting)
+            radius *= 2;
 
         game->ForEachReferenceInRange(player, radius, [&](RE::TESObjectREFR& ref) {
             if (const auto object = ref.GetBaseObject(); object->IsBook()) {

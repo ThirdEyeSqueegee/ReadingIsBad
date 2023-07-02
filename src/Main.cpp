@@ -6,9 +6,9 @@
 
 void Listener(SKSE::MessagingInterface::Message* message) {
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
-        Events::OnSpellCastEventHandler::Register();
         FormLookup::LoadSpell();
         Settings::LoadSettings();
+        Events::OnSpellCastEventHandler::Register();
     }
 }
 
