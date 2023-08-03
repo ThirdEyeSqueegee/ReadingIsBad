@@ -16,5 +16,5 @@ public:
         return std::addressof(singleton);
     }
 
-    inline static RE::SpellItem* ReadSpell;
+    inline static RE::SpellItem* read_spell;
 };

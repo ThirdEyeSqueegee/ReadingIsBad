@@ -1,13 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "reading-is-bad",
-  "version-string": "1.0.10",
+  "version-string": "1.0.11",
   "license": "GPL-3.0-or-later",
   "features": {
     "plugin": {
       "description": "Build the SKSE plugin.",
-      "dependencies": ["commonlibsse-ng", "simpleini"]
+      "dependencies": [ "commonlibsse-ng", "simpleini" ]
     }
   },
-  "default-features": ["plugin"]
+  "default-features": [ "plugin" ]
 }

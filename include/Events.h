@@ -13,8 +13,8 @@ namespace Events {
 
         static OnSpellCastEventHandler* GetSingleton();
 
-        RE::BSEventNotifyControl ProcessEvent(const RE::TESSpellCastEvent* event,
-                                              RE::BSTEventSource<RE::TESSpellCastEvent>* source) override;
+        RE::BSEventNotifyControl ProcessEvent(const RE::TESSpellCastEvent* a_event,
+                                              RE::BSTEventSource<RE::TESSpellCastEvent>* a_eventSource) override;
 
         static void Register();
     };

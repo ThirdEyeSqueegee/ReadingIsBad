@@ -6,7 +6,7 @@ namespace FormLookup {
     static void LoadSpell() {
         const auto handler = RE::TESDataHandler::GetSingleton();
         const auto utility = Utility::GetSingleton();
-        utility->ReadSpell = handler->LookupForm(0x800, "ReadingIsBad.esp")->As<RE::SpellItem>();
-        logger::info("Loaded ReadSpell: {}", utility->ReadSpell->GetName());
+        utility->read_spell = handler->LookupForm<RE::SpellItem>(0x800, "ReadingIsBad.esp");
+        logger::info("Loaded ReadSpell: {}", utility->read_spell->GetName());
     }
 }

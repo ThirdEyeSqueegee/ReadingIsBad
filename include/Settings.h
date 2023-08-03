@@ -12,7 +12,11 @@ public:
     Settings& operator=(Settings&&) = delete;
 
     static Settings* GetSingleton();
+
     static void LoadSettings();
 
-    inline static float radius;
+    inline static bool debug_logging = false;
+
+    inline static float radius = 512.0f;
+    inline static bool skip_tomes = false;
 };
