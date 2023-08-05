@@ -47,7 +47,8 @@ namespace Events {
                     }
                 }
             } else if (object->GetFormType() == RE::FormType::Container) {
-                if (const auto container_name = std::string_view(object->GetName()); !container_name.contains("Merchant"sv)) {
+                logger::debug("Container {} detected", object->GetName());
+                if (const auto container_name = std::string_view(object->GetName()); !container_name.contains("Chest"sv)) {
                     for (const auto books = ref.GetInventory([](const RE::TESBoundObject& item) { return item.IsBook(); });
                          const auto obj : books | std::views::keys) {
                         if (const auto book = obj->As<RE::TESObjectBOOK>(); !book->IsRead() && !book->IsNoteScroll()) {
