@@ -1,10 +1,10 @@
 #include "Events.h"
 #include "FormLookup.h"
 #include "Logging.h"
-#include "SKSE/Interfaces.h"
 #include "Settings.h"
 
-void Listener(SKSE::MessagingInterface::Message* message) {
+void Listener(SKSE::MessagingInterface::Message* message) noexcept
+{
     if (message->type == SKSE::MessagingInterface::kDataLoaded) {
         FormLookup::LoadSpell();
         Settings::LoadSettings();
@@ -12,20 +12,24 @@ void Listener(SKSE::MessagingInterface::Message* message) {
     }
 }
 
-SKSEPluginLoad(const SKSE::LoadInterface* skse) {
+SKSEPluginLoad(const SKSE::LoadInterface* skse)
+{
     InitializeLogging();
 
-    const auto plugin = SKSE::PluginDeclaration::GetSingleton();
-    const auto version = plugin->GetVersion();
+    const auto plugin{ SKSE::PluginDeclaration::GetSingleton() };
+    const auto name{ plugin->GetName() };
+    const auto version{ plugin->GetVersion() };
 
-    logger::info("{} {} is loading...", plugin->GetName(), version);
+    logger::info("{} {} is loading...", name, version);
 
     Init(skse);
 
-    if (const auto messaging = SKSE::GetMessagingInterface(); !messaging->RegisterListener(Listener))
+    if (const auto messaging{ SKSE::GetMessagingInterface() }; !messaging->RegisterListener(Listener)) {
         return false;
+    }
 
-    logger::info("{} has finished loading.", plugin->GetName());
+    logger::info("{} has finished loading.", name);
+    logger::info("");
 
     return true;
 }
